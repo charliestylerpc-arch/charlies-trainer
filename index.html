@@ -1,0 +1,1134 @@
+
+raw
+Trainer · HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+<style>
+  :root {
+    --bg: #0e0e0f;
+    --bg2: #161618;
+    --bg3: #1e1e21;
+    --bg4: #252529;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #f0efe8;
+    --text2: #9a9991;
+    --text3: #5a5a54;
+    --accent: #d4f542;
+    --accent2: #b8d930;
+    --accent-dim: rgba(212,245,66,0.12);
+    --red: #ff5c5c;
+    --red-dim: rgba(255,92,92,0.12);
+    --blue: #5ca4ff;
+    --blue-dim: rgba(92,164,255,0.12);
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    overflow-x: hidden;
+  }
+ 
+  /* LAYOUT */
+  .shell { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .logo-sub { font-size: 11px; color: var(--text3); letter-spacing: 1px; margin-top: 2px; }
+  .nav { padding: 16px 12px; flex: 1; }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--text2);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all .15s;
+    margin-bottom: 2px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+  .nav-item i { font-size: 18px; }
+  .nav-item:hover { background: var(--bg3); color: var(--text); }
+  .nav-item.active { background: var(--accent-dim); color: var(--accent); }
+  .nav-item.active i { color: var(--accent); }
+  .main { flex: 1; min-width: 0; padding: 32px; overflow-y: auto; }
+  .page { display: none; animation: fadeIn .2s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+ 
+  /* TYPOGRAPHY */
+  h1 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: var(--text); line-height: 1; }
+  h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+  h3 { font-size: 15px; font-weight: 600; }
+  .page-header { margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .page-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+ 
+  /* CARDS */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .card-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--text2); text-transform: uppercase; letter-spacing: .5px; }
+  .card-title i { font-size: 16px; color: var(--accent); }
+ 
+  /* FORM ELEMENTS */
+  input, select, textarea {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 9px 12px;
+    width: 100%;
+    transition: border-color .15s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  input::placeholder, textarea::placeholder { color: var(--text3); }
+  select option { background: var(--bg3); }
+  label { font-size: 12px; color: var(--text2); display: block; margin-bottom: 5px; font-weight: 500; }
+  textarea { resize: vertical; min-height: 70px; }
+ 
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text);
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--bg4); border-color: var(--border2); }
+  .btn-accent { background: var(--accent); color: #0e0e0f; border-color: var(--accent); }
+  .btn-accent:hover { background: var(--accent2); border-color: var(--accent2); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn-ghost { background: transparent; border-color: transparent; color: var(--text2); }
+  .btn-ghost:hover { background: var(--bg3); color: var(--text); border-color: var(--border); }
+  .btn-danger { background: var(--red-dim); border-color: transparent; color: var(--red); }
+  .btn-danger:hover { background: rgba(255,92,92,0.2); }
+  .btn i { font-size: 15px; }
+  .btn-full { width: 100%; justify-content: center; }
+ 
+  /* GRIDS */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .form-row { margin-bottom: 12px; }
+ 
+  /* STAT CARDS */
+  .stat-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--accent); line-height: 1; }
+  .stat-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+ 
+  /* BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-green { background: rgba(100,220,100,0.12); color: #6edc6e; }
+  .badge-blue { background: var(--blue-dim); color: var(--blue); }
+  .badge-accent { background: var(--accent-dim); color: var(--accent); }
+  .badge-red { background: var(--red-dim); color: var(--red); }
+ 
+  /* DAY PILLS */
+  .day-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+  .day-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text2);
+    transition: all .15s;
+    letter-spacing: .3px;
+  }
+  .day-pill.active { background: var(--accent); color: #0e0e0f; border-color: var(--accent); }
+  .day-pill:hover:not(.active) { border-color: var(--border2); color: var(--text); }
+ 
+  /* EXERCISE ITEMS */
+  .ex-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all .15s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ex-item:hover { border-color: var(--border2); background: var(--bg4); }
+  .ex-item.active { border-color: var(--accent); background: var(--accent-dim); }
+  .ex-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .ex-meta { font-size: 12px; color: var(--text2); }
+ 
+  /* SET ROWS */
+  .set-row {
+    display: grid;
+    grid-template-columns: 36px 1fr auto 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .set-row:last-child { border-bottom: none; }
+  .set-num { font-size: 12px; color: var(--text3); font-weight: 600; text-align: center; }
+  .unit-label { font-size: 12px; color: var(--text3); }
+ 
+  /* TIMER */
+  .timer-wrap { text-align: center; padding: 20px 0; }
+  .timer-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 88px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    line-height: 1;
+    transition: color .3s;
+  }
+  .timer-big.done { color: #6edc6e; }
+  .timer-ring { position: relative; width: 200px; height: 200px; margin: 0 auto 16px; }
+  .timer-ring svg { transform: rotate(-90deg); }
+  .timer-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+  .timer-presets { display: flex; gap: 8px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
+  .timer-controls { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+ 
+  /* PROGRESS BARS */
+  .progress-track { height: 6px; background: var(--bg4); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
+ 
+  /* CHAT */
+  .chat-wrap { display: flex; flex-direction: column; height: 420px; }
+  .chat-msgs { flex: 1; overflow-y: auto; padding: 4px 0; display: flex; flex-direction: column; gap: 10px; }
+  .chat-msgs::-webkit-scrollbar { width: 4px; }
+  .chat-msgs::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
+  .msg { max-width: 80%; padding: 10px 14px; font-size: 13px; line-height: 1.6; }
+  .msg.user { background: var(--accent); color: #0e0e0f; align-self: flex-end; border-radius: 14px 14px 4px 14px; font-weight: 500; }
+  .msg.ai { background: var(--bg3); border: 1px solid var(--border); align-self: flex-start; border-radius: 4px 14px 14px 14px; color: var(--text); }
+  .chat-footer { display: flex; gap: 8px; margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
+  .chat-footer input { flex: 1; }
+ 
+  /* FOOD */
+  .food-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .food-row:last-child { border-bottom: none; }
+  .food-name { flex: 1; font-size: 13px; font-weight: 500; }
+  .food-macros { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .food-cals { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--accent); letter-spacing: 1px; }
+ 
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.7);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    width: 100%;
+    max-width: 480px;
+    transform: scale(.96) translateY(10px);
+    transition: transform .2s;
+  }
+  .modal-overlay.open .modal { transform: none; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; }
+ 
+  /* HISTORY */
+  .history-session { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+  .history-date { font-size: 11px; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+  .history-ex { margin-bottom: 8px; }
+  .history-ex-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .set-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+  .set-chip { background: var(--bg4); border: 1px solid var(--border); border-radius: 20px; padding: 2px 8px; font-size: 11px; color: var(--text2); }
+ 
+  /* EMPTY STATE */
+  .empty { text-align: center; padding: 40px 20px; color: var(--text3); }
+  .empty i { font-size: 40px; margin-bottom: 12px; display: block; }
+  .empty p { font-size: 13px; }
+ 
+  /* MOBILE */
+  .mobile-header { display: none; padding: 16px; background: var(--bg2); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+  .mobile-nav { display: none; }
+ 
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+ 
+  .spin { animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+ 
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+ 
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .mobile-header { display: flex; justify-content: space-between; align-items: center; }
+    .mobile-header .logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--accent); }
+    .mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg2); border-top: 1px solid var(--border); z-index: 50; }
+    .mobile-nav button { flex: 1; padding: 10px 4px; background: none; border: none; color: var(--text3); font-size: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; font-family: 'DM Sans', sans-serif; }
+    .mobile-nav button.active { color: var(--accent); }
+    .mobile-nav button i { font-size: 20px; }
+    .main { padding: 16px; padding-bottom: 80px; }
+    .grid2, .grid3, .grid4 { grid-template-columns: 1fr 1fr; }
+    .set-row { grid-template-columns: 28px 1fr auto 1fr auto auto; gap: 5px; }
+    .timer-big { font-size: 72px; }
+  }
+</style>
+</head>
+<body>
+ 
+<div class="shell">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="logo">
+      <div class="logo-text">MY TRAINER</div>
+      <div class="logo-sub">PERSONAL FITNESS APP</div>
+    </div>
+    <div class="nav">
+      <button class="nav-item active" onclick="switchPage('workout')"><i class="ti ti-barbell"></i> Workout</button>
+      <button class="nav-item" onclick="switchPage('timer')"><i class="ti ti-clock"></i> Rest Timer</button>
+      <button class="nav-item" onclick="switchPage('history')"><i class="ti ti-chart-bar"></i> History</button>
+      <button class="nav-item" onclick="switchPage('food')"><i class="ti ti-salad"></i> Nutrition</button>
+      <button class="nav-item" onclick="switchPage('ai')"><i class="ti ti-robot"></i> AI Coach</button>
+    </div>
+    <div style="padding:16px;border-top:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--text3);text-align:center">All data saved locally</div>
+    </div>
+  </nav>
+ 
+  <!-- MOBILE HEADER -->
+  <div class="mobile-header">
+    <div class="logo-text">MY TRAINER</div>
+  </div>
+ 
+  <!-- MAIN -->
+  <main class="main">
+ 
+    <!-- WORKOUT PAGE -->
+    <div id="page-workout" class="page active">
+      <div class="page-header">
+        <div>
+          <h1>WORKOUT</h1>
+          <div class="page-sub" id="workoutDate"></div>
+        </div>
+        <button class="btn btn-accent" onclick="openAddExModal()"><i class="ti ti-plus"></i> Add Exercise</button>
+      </div>
+      <div class="day-pills" id="dayPills"></div>
+ 
+      <div class="grid2" style="gap:16px">
+        <div>
+          <div class="card" style="margin-bottom:0">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-list-check"></i> Exercises</div>
+            </div>
+            <div id="exerciseList"><div class="empty"><i class="ti ti-barbell"></i><p>No exercises yet.<br>Add one to get started.</p></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card" id="logPanel" style="display:none;margin-bottom:0">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-pencil"></i> Log Sets</div>
+              <span id="logExName" style="font-size:13px;color:var(--accent);font-weight:600"></span>
+            </div>
+            <div id="setsList"></div>
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <button class="btn btn-accent btn-full" onclick="addSet()"><i class="ti ti-plus"></i> Add Set</button>
+            </div>
+          </div>
+          <div id="logEmpty" class="card" style="margin-bottom:0">
+            <div class="empty" style="padding:30px 10px">
+              <i class="ti ti-hand-click" style="color:var(--text3)"></i>
+              <p>Select an exercise<br>to log your sets</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- TIMER PAGE -->
+    <div id="page-timer" class="page">
+      <div class="page-header">
+        <div><h1>REST TIMER</h1><div class="page-sub">Take the right amount of rest between sets</div></div>
+      </div>
+      <div class="grid2" style="gap:16px">
+        <div>
+          <div class="card">
+            <div class="timer-wrap">
+              <div class="timer-ring">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                  <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="10"/>
+                  <circle id="timerRing" cx="100" cy="100" r="88" fill="none" stroke="#d4f542" stroke-width="10"
+                    stroke-dasharray="553" stroke-dashoffset="0" stroke-linecap="round" style="transition:stroke-dashoffset .6s linear,stroke .3s"/>
+                </svg>
+                <div class="timer-inner">
+                  <div class="timer-big" id="timerDisplay">1:30</div>
+                  <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">remaining</div>
+                </div>
+              </div>
+              <div class="timer-presets">
+                <button class="btn btn-sm" onclick="setPreset(45)">45s</button>
+                <button class="btn btn-sm" onclick="setPreset(60)">1 min</button>
+                <button class="btn btn-sm active-preset" id="preset90" onclick="setPreset(90)">1:30</button>
+                <button class="btn btn-sm" onclick="setPreset(120)">2 min</button>
+                <button class="btn btn-sm" onclick="setPreset(180)">3 min</button>
+              </div>
+              <div class="timer-controls">
+                <button class="btn btn-accent" id="timerBtn" onclick="toggleTimer()" style="min-width:120px"><i class="ti ti-player-play" id="timerIcon"></i> <span id="timerBtnText">Start</span></button>
+                <button class="btn" onclick="resetTimer()"><i class="ti ti-refresh"></i> Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="ti ti-settings"></i> Custom Duration</div></div>
+            <div class="form-row">
+              <label>Minutes</label>
+              <input type="number" id="customMin" placeholder="1" min="0" max="59" style="margin-bottom:8px"/>
+            </div>
+            <div class="form-row">
+              <label>Seconds</label>
+              <input type="number" id="customSec" placeholder="30" min="0" max="59"/>
+            </div>
+            <button class="btn btn-accent btn-full" style="margin-top:12px" onclick="setCustomTimer()"><i class="ti ti-check"></i> Set Timer</button>
+          </div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px"><i class="ti ti-bell"></i> Auto Timer</div>
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:var(--text);font-weight:400">
+              <input type="checkbox" id="autoTimerChk" style="width:auto;accent-color:var(--accent)" checked/>
+              Start automatically after logging a set
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- HISTORY PAGE -->
+    <div id="page-history" class="page">
+      <div class="page-header">
+        <div><h1>HISTORY</h1><div class="page-sub">Every rep, every session</div></div>
+        <button class="btn btn-danger btn-sm" onclick="clearHistory()"><i class="ti ti-trash"></i> Clear All</button>
+      </div>
+      <div class="grid4" style="margin-bottom:24px" id="historyStats"></div>
+      <div id="historyList"></div>
+    </div>
+ 
+    <!-- FOOD PAGE -->
+    <div id="page-food" class="page">
+      <div class="page-header">
+        <div><h1>NUTRITION</h1><div class="page-sub" id="foodDateLabel"></div></div>
+        <button class="btn btn-accent" onclick="openFoodModal()"><i class="ti ti-plus"></i> Log Food</button>
+      </div>
+      <div class="grid4" style="margin-bottom:20px" id="foodTotals"></div>
+      <div class="grid2" style="gap:16px">
+        <div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px"><i class="ti ti-flame"></i> Daily Goals</div>
+            <div class="form-row">
+              <label>Calorie goal (kcal)</label>
+              <input type="number" id="goalCals" placeholder="2000" oninput="saveGoals()"/>
+            </div>
+            <div class="form-row">
+              <label>Protein goal (g)</label>
+              <input type="number" id="goalProtein" placeholder="150" oninput="saveGoals()"/>
+            </div>
+            <div class="form-row">
+              <label>Carb goal (g)</label>
+              <input type="number" id="goalCarbs" placeholder="200" oninput="saveGoals()"/>
+            </div>
+            <div class="form-row">
+              <label>Fat goal (g)</label>
+              <input type="number" id="goalFat" placeholder="65" oninput="saveGoals()"/>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px"><i class="ti ti-chart-pie"></i> Macros Progress</div>
+            <div id="macrosProgress"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><i class="ti ti-list"></i> Today's Food</div>
+            </div>
+            <div id="foodList"><div class="empty" style="padding:20px"><i class="ti ti-bowl" style="font-size:28px"></i><p>No food logged today.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- AI COACH PAGE -->
+    <div id="page-ai" class="page">
+      <div class="page-header">
+        <div><h1>AI COACH</h1><div class="page-sub">Powered by Claude — knows your workouts & nutrition</div></div>
+        <button class="btn btn-sm" onclick="clearChat()"><i class="ti ti-refresh"></i> New Chat</button>
+      </div>
+      <div class="card">
+        <div class="chat-wrap">
+          <div class="chat-msgs" id="chatMsgs">
+            <div class="msg ai">Hey! I'm your AI personal trainer and nutrition coach. I have access to your workout plan and today's food log, so I can give you personalised advice. What would you like to know?</div>
+          </div>
+          <div class="chat-footer">
+            <input id="chatInput" placeholder="Ask about form, nutrition, programs, recovery..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"/>
+            <button class="btn btn-accent" id="chatSendBtn" onclick="sendChat()"><i class="ti ti-send"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:0">
+        <div class="card-title" style="margin-bottom:14px"><i class="ti ti-bolt"></i> Quick Questions</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-sm" onclick="quickAsk('Review my current workout plan and suggest improvements')">Review my plan</button>
+          <button class="btn btn-sm" onclick="quickAsk('What should I eat today based on my nutrition goals?')">What to eat today?</button>
+          <button class="btn btn-sm" onclick="quickAsk('How long should I rest between sets for muscle growth?')">Rest times</button>
+          <button class="btn btn-sm" onclick="quickAsk('How can I improve my bench press?')">Bench tips</button>
+          <button class="btn btn-sm" onclick="quickAsk('What are the best exercises for building a bigger back?')">Back exercises</button>
+        </div>
+      </div>
+    </div>
+ 
+  </main>
+</div>
+ 
+<!-- MOBILE NAV -->
+<nav class="mobile-nav">
+  <button class="active" onclick="switchPage('workout')"><i class="ti ti-barbell"></i>Workout</button>
+  <button onclick="switchPage('timer')"><i class="ti ti-clock"></i>Timer</button>
+  <button onclick="switchPage('history')"><i class="ti ti-chart-bar"></i>History</button>
+  <button onclick="switchPage('food')"><i class="ti ti-salad"></i>Food</button>
+  <button onclick="switchPage('ai')"><i class="ti ti-robot"></i>AI</button>
+</nav>
+ 
+<!-- ADD EXERCISE MODAL -->
+<div class="modal-overlay" id="addExModal" onclick="if(event.target===this)closeAddExModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">ADD EXERCISE</div>
+      <button class="btn btn-ghost btn-sm" onclick="closeAddExModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="form-row">
+      <label>Day</label>
+      <select id="newExDay"></select>
+    </div>
+    <div class="form-row">
+      <label>Exercise Name</label>
+      <input id="newExName" placeholder="e.g. Bench Press, Squat, Pull-up..."/>
+    </div>
+    <div class="grid2">
+      <div class="form-row">
+        <label>Sets</label>
+        <input type="number" id="newExSets" placeholder="3" min="1"/>
+      </div>
+      <div class="form-row">
+        <label>Target Reps</label>
+        <input type="number" id="newExReps" placeholder="10" min="1"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Notes (optional)</label>
+      <input id="newExNotes" placeholder="e.g. Slow negatives, pause at bottom..."/>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-accent" style="flex:1" onclick="saveExercise()"><i class="ti ti-check"></i> Save Exercise</button>
+      <button class="btn" onclick="closeAddExModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ADD FOOD MODAL -->
+<div class="modal-overlay" id="addFoodModal" onclick="if(event.target===this)closeFoodModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">LOG FOOD</div>
+      <button class="btn btn-ghost btn-sm" onclick="closeFoodModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="form-row">
+      <label>Food / Meal Name</label>
+      <input id="foodName" placeholder="e.g. Chicken breast, Oats, Protein shake..."/>
+    </div>
+    <div class="grid2">
+      <div class="form-row">
+        <label>Calories (kcal)</label>
+        <input type="number" id="foodCals" placeholder="300" min="0"/>
+      </div>
+      <div class="form-row">
+        <label>Protein (g)</label>
+        <input type="number" id="foodProtein" placeholder="30" min="0"/>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="form-row">
+        <label>Carbs (g)</label>
+        <input type="number" id="foodCarbs" placeholder="20" min="0"/>
+      </div>
+      <div class="form-row">
+        <label>Fat (g)</label>
+        <input type="number" id="foodFat" placeholder="10" min="0"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Notes (optional)</label>
+      <input id="foodNotes" placeholder="e.g. Pre-workout meal, post-gym..."/>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-accent" style="flex:1" onclick="saveFood()"><i class="ti ti-check"></i> Add to Today</button>
+      <button class="btn" onclick="closeFoodModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+ 
+<script>
+const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const TODAY_IDX = (new Date().getDay() + 6) % 7;
+ 
+let S = {
+  exercises: {},   // {day: [{name, sets, reps, notes}]}
+  logs: {},        // {date: {day-idx: [{weight, reps}]}}
+  food: {},        // {date: [{name, cals, protein, carbs, fat, notes}]}
+  goals: { cals: 2000, protein: 150, carbs: 200, fat: 65 },
+  activeDay: DAYS[TODAY_IDX],
+  activeEx: null,
+  timer: { total: 90, left: 90, running: false, interval: null },
+  chatHistory: []
+};
+ 
+// ── PERSISTENCE ────────────────────────────────────────────────────────────────
+function saveData() {
+  try {
+    const toSave = { ...S, timer: { total: S.timer.total, left: S.timer.total, running: false, interval: null } };
+    localStorage.setItem('mytrainer_v2', JSON.stringify(toSave));
+  } catch(e) { console.warn('Save failed', e); }
+}
+ 
+function loadData() {
+  try {
+    const raw = localStorage.getItem('mytrainer_v2');
+    if (raw) {
+      const saved = JSON.parse(raw);
+      S = { ...S, ...saved, timer: { ...S.timer, ...saved.timer, running: false, interval: null } };
+    }
+  } catch(e) { console.warn('Load failed', e); }
+}
+ 
+// ── NAVIGATION ─────────────────────────────────────────────────────────────────
+function switchPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.sidebar .nav-item').forEach((b, i) => {
+    b.classList.toggle('active', ['workout','timer','history','food','ai'][i] === name);
+  });
+  document.querySelectorAll('.mobile-nav button').forEach((b, i) => {
+    b.classList.toggle('active', ['workout','timer','history','food','ai'][i] === name);
+  });
+  if (name === 'history') renderHistory();
+  if (name === 'food') renderFood();
+}
+ 
+// ── WORKOUT ────────────────────────────────────────────────────────────────────
+function today() { return new Date().toISOString().slice(0, 10); }
+ 
+function initWorkout() {
+  document.getElementById('workoutDate').textContent = new Date().toLocaleDateString('en-AU', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  renderDayPills();
+  renderExercises();
+}
+ 
+function renderDayPills() {
+  const el = document.getElementById('dayPills');
+  el.innerHTML = DAYS.map(d => `<div class="day-pill${d === S.activeDay ? ' active' : ''}" onclick="selectDay('${d}')">${d.slice(0,3).toUpperCase()}</div>`).join('');
+  const sel = document.getElementById('newExDay');
+  if (sel) sel.innerHTML = DAYS.map(d => `<option value="${d}"${d === S.activeDay ? ' selected' : ''}>${d}</option>`).join('');
+}
+ 
+function selectDay(d) {
+  S.activeDay = d;
+  S.activeEx = null;
+  document.getElementById('logPanel').style.display = 'none';
+  document.getElementById('logEmpty').style.display = 'block';
+  renderDayPills();
+  renderExercises();
+}
+ 
+function renderExercises() {
+  const list = S.exercises[S.activeDay] || [];
+  const el = document.getElementById('exerciseList');
+  if (!list.length) {
+    el.innerHTML = '<div class="empty"><i class="ti ti-barbell"></i><p>No exercises for ' + S.activeDay + '.<br>Click "+ Add Exercise" to begin.</p></div>';
+    return;
+  }
+  el.innerHTML = list.map((ex, i) => {
+    const key = S.activeDay + '-' + i;
+    const sets = (S.logs[today()] || {})[key] || [];
+    const done = sets.filter(s => s.weight || s.reps).length;
+    return `<div class="ex-item${S.activeEx === i ? ' active' : ''}" onclick="selectExercise(${i})">
+      <div>
+        <div class="ex-name">${ex.name}</div>
+        <div class="ex-meta">${ex.sets} sets × ${ex.reps} reps${ex.notes ? ' · ' + ex.notes : ''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        ${done > 0 ? `<span class="badge badge-green">${done}/${ex.sets}</span>` : ''}
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();deleteExercise(${i})"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+ 
+function selectExercise(i) {
+  S.activeEx = i;
+  const ex = S.exercises[S.activeDay][i];
+  document.getElementById('logExName').textContent = ex.name;
+  document.getElementById('logPanel').style.display = 'block';
+  document.getElementById('logEmpty').style.display = 'none';
+  renderExercises();
+  renderSets();
+}
+ 
+function renderSets() {
+  const i = S.activeEx;
+  const key = S.activeDay + '-' + i;
+  if (!S.logs[today()]) S.logs[today()] = {};
+  const sets = S.logs[today()][key] = S.logs[today()][key] || [];
+  const el = document.getElementById('setsList');
+  if (!sets.length) {
+    el.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:10px 0;text-align:center">No sets yet — add your first set below</div>';
+    return;
+  }
+  el.innerHTML = sets.map((s, idx) => `
+    <div class="set-row">
+      <div class="set-num">${idx + 1}</div>
+      <input type="number" value="${s.weight}" placeholder="kg" style="text-align:center" onchange="updateSet(${idx},'weight',this.value)" title="Weight"/>
+      <span class="unit-label">kg</span>
+      <input type="number" value="${s.reps}" placeholder="reps" style="text-align:center" onchange="updateSet(${idx},'reps',this.value)" title="Reps"/>
+      <span class="unit-label">reps</span>
+      <button class="btn btn-ghost btn-sm" onclick="deleteSet(${idx})"><i class="ti ti-x"></i></button>
+    </div>`).join('');
+}
+ 
+function addSet() {
+  const i = S.activeEx;
+  const key = S.activeDay + '-' + i;
+  if (!S.logs[today()]) S.logs[today()] = {};
+  if (!S.logs[today()][key]) S.logs[today()][key] = [];
+  S.logs[today()][key].push({ weight: '', reps: '' });
+  renderSets();
+  renderExercises();
+  saveData();
+  if (document.getElementById('autoTimerChk').checked) {
+    switchPage('timer');
+    resetTimer();
+    startTimer();
+  }
+}
+ 
+function updateSet(idx, field, val) {
+  const key = S.activeDay + '-' + S.activeEx;
+  S.logs[today()][key][idx][field] = val;
+  saveData();
+}
+ 
+function deleteSet(idx) {
+  const key = S.activeDay + '-' + S.activeEx;
+  S.logs[today()][key].splice(idx, 1);
+  renderSets();
+  renderExercises();
+  saveData();
+}
+ 
+function openAddExModal() {
+  renderDayPills();
+  document.getElementById('addExModal').classList.add('open');
+}
+function closeAddExModal() { document.getElementById('addExModal').classList.remove('open'); }
+ 
+function saveExercise() {
+  const day = document.getElementById('newExDay').value;
+  const name = document.getElementById('newExName').value.trim();
+  const sets = parseInt(document.getElementById('newExSets').value) || 3;
+  const reps = parseInt(document.getElementById('newExReps').value) || 10;
+  const notes = document.getElementById('newExNotes').value.trim();
+  if (!name) { document.getElementById('newExName').focus(); return; }
+  if (!S.exercises[day]) S.exercises[day] = [];
+  S.exercises[day].push({ name, sets, reps, notes });
+  ['newExName','newExSets','newExReps','newExNotes'].forEach(id => document.getElementById(id).value = '');
+  closeAddExModal();
+  S.activeDay = day;
+  renderDayPills();
+  renderExercises();
+  saveData();
+}
+ 
+function deleteExercise(i) {
+  if (!confirm('Delete this exercise?')) return;
+  S.exercises[S.activeDay].splice(i, 1);
+  S.activeEx = null;
+  document.getElementById('logPanel').style.display = 'none';
+  document.getElementById('logEmpty').style.display = 'block';
+  renderExercises();
+  saveData();
+}
+ 
+// ── TIMER ──────────────────────────────────────────────────────────────────────
+function updateTimerUI() {
+  const m = Math.floor(S.timer.left / 60);
+  const s = S.timer.left % 60;
+  document.getElementById('timerDisplay').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  const circ = 553;
+  const pct = S.timer.total > 0 ? S.timer.left / S.timer.total : 1;
+  document.getElementById('timerRing').style.strokeDashoffset = circ * (1 - pct);
+  const disp = document.getElementById('timerDisplay');
+  disp.classList.toggle('done', S.timer.left === 0);
+  document.getElementById('timerRing').style.stroke = S.timer.left === 0 ? '#6edc6e' : '#d4f542';
+}
+ 
+function setPreset(s) {
+  stopTimer();
+  S.timer.total = s;
+  S.timer.left = s;
+  document.getElementById('timerBtnText').textContent = 'Start';
+  document.getElementById('timerIcon').className = 'ti ti-player-play';
+  updateTimerUI();
+}
+ 
+function setCustomTimer() {
+  const m = parseInt(document.getElementById('customMin').value) || 0;
+  const s = parseInt(document.getElementById('customSec').value) || 0;
+  const total = m * 60 + s;
+  if (total > 0) setPreset(total);
+}
+ 
+function toggleTimer() { S.timer.running ? pauseTimer() : startTimer(); }
+ 
+function startTimer() {
+  if (S.timer.left <= 0) { S.timer.left = S.timer.total; }
+  S.timer.running = true;
+  document.getElementById('timerBtnText').textContent = 'Pause';
+  document.getElementById('timerIcon').className = 'ti ti-player-pause';
+  S.timer.interval = setInterval(() => {
+    S.timer.left--;
+    updateTimerUI();
+    if (S.timer.left <= 0) {
+      stopTimer();
+      document.getElementById('timerBtnText').textContent = 'Done!';
+      document.getElementById('timerIcon').className = 'ti ti-check';
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = 880;
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.5);
+      } catch(e) {}
+    }
+  }, 1000);
+}
+ 
+function pauseTimer() {
+  stopTimer();
+  document.getElementById('timerBtnText').textContent = 'Resume';
+  document.getElementById('timerIcon').className = 'ti ti-player-play';
+}
+ 
+function stopTimer() {
+  clearInterval(S.timer.interval);
+  S.timer.running = false;
+}
+ 
+function resetTimer() {
+  stopTimer();
+  S.timer.left = S.timer.total;
+  document.getElementById('timerBtnText').textContent = 'Start';
+  document.getElementById('timerIcon').className = 'ti ti-player-play';
+  updateTimerUI();
+}
+ 
+// ── HISTORY ────────────────────────────────────────────────────────────────────
+function renderHistory() {
+  const dates = Object.keys(S.logs).sort().reverse();
+  let totalSets = 0, totalSessions = 0, totalVol = 0, totalExDone = 0;
+  dates.forEach(d => {
+    const dl = S.logs[d];
+    const hasData = Object.values(dl).some(s => s.length > 0);
+    if (hasData) totalSessions++;
+    Object.values(dl).forEach(sets => {
+      if (sets.length) totalExDone++;
+      sets.forEach(s => {
+        totalSets++;
+        totalVol += (parseFloat(s.weight) || 0) * (parseInt(s.reps) || 0);
+      });
+    });
+  });
+  document.getElementById('historyStats').innerHTML = `
+    <div class="stat-card"><div class="stat-val">${totalSessions}</div><div class="stat-lbl">Sessions</div></div>
+    <div class="stat-card"><div class="stat-val">${totalExDone}</div><div class="stat-lbl">Exercises Done</div></div>
+    <div class="stat-card"><div class="stat-val">${totalSets}</div><div class="stat-lbl">Total Sets</div></div>
+    <div class="stat-card"><div class="stat-val">${totalVol >= 1000 ? (totalVol/1000).toFixed(1)+'t' : totalVol+'kg'}</div><div class="stat-lbl">Volume Lifted</div></div>`;
+ 
+  const listEl = document.getElementById('historyList');
+  if (!dates.length) { listEl.innerHTML = '<div class="empty"><i class="ti ti-clock"></i><p>No workouts logged yet.<br>Get to it!</p></div>'; return; }
+ 
+  listEl.innerHTML = dates.map(d => {
+    const dl = S.logs[d];
+    const entries = Object.entries(dl).filter(([k, v]) => v.length > 0);
+    if (!entries.length) return '';
+    const dateStr = new Date(d + 'T12:00').toLocaleDateString('en-AU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    return `<div class="history-session">
+      <div class="history-date">${dateStr}</div>
+      ${entries.map(([key, sets]) => {
+        const [day, idxStr] = key.split(/-(?=[^-]*$)/);
+        const idx = parseInt(idxStr);
+        const ex = (S.exercises[day] || [])[idx];
+        const exName = ex ? ex.name : key;
+        const maxW = Math.max(0, ...sets.map(s => parseFloat(s.weight) || 0));
+        const vol = sets.reduce((a, s) => a + (parseFloat(s.weight)||0)*(parseInt(s.reps)||0), 0);
+        return `<div class="history-ex">
+          <div class="history-ex-name">${exName} <span class="badge badge-blue" style="margin-left:4px">${day}</span></div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:4px">${sets.length} sets · max ${maxW}kg · volume ${vol}kg</div>
+          <div class="set-chips">${sets.map((s, i) => `<span class="set-chip">Set ${i+1}: ${s.weight||'?'}kg × ${s.reps||'?'}</span>`).join('')}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+}
+ 
+function clearHistory() {
+  if (!confirm('Clear all workout history? This cannot be undone.')) return;
+  S.logs = {};
+  saveData();
+  renderHistory();
+}
+ 
+// ── FOOD ───────────────────────────────────────────────────────────────────────
+function renderFood() {
+  document.getElementById('foodDateLabel').textContent = new Date().toLocaleDateString('en-AU', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const d = today();
+  const foods = S.food[d] || [];
+  const t = foods.reduce((a, f) => ({
+    cals: a.cals + (f.cals||0), protein: a.protein + (f.protein||0),
+    carbs: a.carbs + (f.carbs||0), fat: a.fat + (f.fat||0)
+  }), { cals: 0, protein: 0, carbs: 0, fat: 0 });
+ 
+  document.getElementById('foodTotals').innerHTML = `
+    <div class="stat-card"><div class="stat-val">${Math.round(t.cals)}</div><div class="stat-lbl">Calories</div></div>
+    <div class="stat-card"><div class="stat-val">${Math.round(t.protein)}g</div><div class="stat-lbl">Protein</div></div>
+    <div class="stat-card"><div class="stat-val">${Math.round(t.carbs)}g</div><div class="stat-lbl">Carbs</div></div>
+    <div class="stat-card"><div class="stat-val">${Math.round(t.fat)}g</div><div class="stat-lbl">Fat</div></div>`;
+ 
+  const goals = S.goals;
+  document.getElementById('macrosProgress').innerHTML = [
+    { lbl: 'Calories', val: t.cals, goal: goals.cals, color: '#d4f542' },
+    { lbl: 'Protein', val: t.protein, goal: goals.protein, color: '#5ca4ff' },
+    { lbl: 'Carbs', val: t.carbs, goal: goals.carbs, color: '#ffa55c' },
+    { lbl: 'Fat', val: t.fat, goal: goals.fat, color: '#ff5c9a' }
+  ].map(m => {
+    const pct = Math.min(100, Math.round((m.val / (m.goal||1)) * 100));
+    return `<div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+        <span style="color:var(--text2);font-weight:500">${m.lbl}</span>
+        <span style="color:var(--text2)">${Math.round(m.val)} / ${m.goal||'–'}</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${m.color}"></div></div>
+    </div>`;
+  }).join('');
+ 
+  const listEl = document.getElementById('foodList');
+  if (!foods.length) { listEl.innerHTML = '<div class="empty" style="padding:20px"><i class="ti ti-bowl" style="font-size:28px"></i><p>No food logged today.</p></div>'; return; }
+  listEl.innerHTML = foods.map((f, i) => `
+    <div class="food-row">
+      <div style="flex:1">
+        <div class="food-name">${f.name}${f.notes ? ' <span style="color:var(--text3);font-weight:400;font-size:12px">· ' + f.notes + '</span>' : ''}</div>
+        <div class="food-macros">P: ${f.protein||0}g · C: ${f.carbs||0}g · F: ${f.fat||0}g</div>
+      </div>
+      <div class="food-cals">${f.cals||0}</div>
+      <button class="btn btn-ghost btn-sm" onclick="deleteFood(${i})"><i class="ti ti-x"></i></button>
+    </div>`).join('');
+ 
+  const gc = document.getElementById('goalCals');
+  const gp = document.getElementById('goalProtein');
+  const gch = document.getElementById('goalCarbs');
+  const gf = document.getElementById('goalFat');
+  if (gc && !gc.value) gc.value = goals.cals || '';
+  if (gp && !gp.value) gp.value = goals.protein || '';
+  if (gch && !gch.value) gch.value = goals.carbs || '';
+  if (gf && !gf.value) gf.value = goals.fat || '';
+}
+ 
+function openFoodModal() { document.getElementById('addFoodModal').classList.add('open'); }
+function closeFoodModal() { document.getElementById('addFoodModal').classList.remove('open'); }
+ 
+function saveFood() {
+  const name = document.getElementById('foodName').value.trim();
+  if (!name) { document.getElementById('foodName').focus(); return; }
+  const entry = {
+    name,
+    cals: parseFloat(document.getElementById('foodCals').value) || 0,
+    protein: parseFloat(document.getElementById('foodProtein').value) || 0,
+    carbs: parseFloat(document.getElementById('foodCarbs').value) || 0,
+    fat: parseFloat(document.getElementById('foodFat').value) || 0,
+    notes: document.getElementById('foodNotes').value.trim(),
+    time: new Date().toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' })
+  };
+  const d = today();
+  if (!S.food[d]) S.food[d] = [];
+  S.food[d].push(entry);
+  ['foodName','foodCals','foodProtein','foodCarbs','foodFat','foodNotes'].forEach(id => document.getElementById(id).value = '');
+  closeFoodModal();
+  renderFood();
+  saveData();
+}
+ 
+function deleteFood(i) {
+  S.food[today()].splice(i, 1);
+  renderFood();
+  saveData();
+}
+ 
+function saveGoals() {
+  S.goals.cals = parseInt(document.getElementById('goalCals').value) || 2000;
+  S.goals.protein = parseInt(document.getElementById('goalProtein').value) || 150;
+  S.goals.carbs = parseInt(document.getElementById('goalCarbs').value) || 200;
+  S.goals.fat = parseInt(document.getElementById('goalFat').value) || 65;
+  saveData();
+  renderFood();
+}
+ 
+// ── AI COACH ───────────────────────────────────────────────────────────────────
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  appendMsg('user', msg);
+  S.chatHistory.push({ role: 'user', content: msg });
+ 
+  const loadEl = appendMsg('ai', '<i class="ti ti-loader spin"></i>');
+  document.getElementById('chatSendBtn').disabled = true;
+ 
+  const workoutCtx = JSON.stringify({ exercises: S.exercises, logsToday: S.logs[today()] || {}, foodToday: S.food[today()] || [], goals: S.goals });
+ 
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `You are an expert personal trainer and nutritionist. Be concise, actionable, and motivating. Use the user's real data when relevant.\n\nUser data: ${workoutCtx}`,
+        messages: S.chatHistory.slice(-12)
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.map(c => c.text || '').join('') || 'Sorry, I had trouble responding. Please try again.';
+    S.chatHistory.push({ role: 'assistant', content: reply });
+    loadEl.innerHTML = reply.replace(/\n/g, '<br>');
+  } catch(e) {
+    loadEl.innerHTML = '⚠ Connection error. Check your internet and try again.';
+  }
+  document.getElementById('chatSendBtn').disabled = false;
+  const msgs = document.getElementById('chatMsgs');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+ 
+function appendMsg(role, html) {
+  const el = document.createElement('div');
+  el.className = 'msg ' + role;
+  el.innerHTML = html;
+  const msgs = document.getElementById('chatMsgs');
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+  return el;
+}
+ 
+function quickAsk(q) {
+  document.getElementById('chatInput').value = q;
+  sendChat();
+}
+ 
+function clearChat() {
+  S.chatHistory = [];
+  document.getElementById('chatMsgs').innerHTML = '<div class="msg ai">Chat cleared! I\'m ready for your next question.</div>';
+}
+ 
+// ── INIT ───────────────────────────────────────────────────────────────────────
+loadData();
+initWorkout();
+updateTimerUI();
+</script>
+</body>
+</html>
